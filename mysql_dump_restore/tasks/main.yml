@@ -1,0 +1,43 @@
+---
+# tasks file for dump_restore
+
+- name: set_date
+  shell: 'date +%m-%d-%Y-%H-%M'
+  register: DATE
+  delegate_to: "{{ SOURCE }}"
+  run_once: True
+
+- import_tasks: 'check_vars.yml'
+- import_tasks: 'set_facts.yml'
+
+- name: Check the {{ DB_NAME }} DB Exists in {{ SOURCE }}.
+  shell: mysql -u root -e 'SHOW DATABASES LIKE "{{ DB_NAME }}"' -sN
+  register: SOURCE_DB
+  delegate_to: "{{ SOURCE }}"
+  run_once: True
+
+- name: Fail if {{ DB_NAME }} DB is not present in "{{ SOURCE }}"
+  fail:
+    msg: Entered DB Name = "{{ DB_NAME }}" is not present in "{{ SOURCE }}"
+  when: DB_NAME not in SOURCE_DB.stdout
+  delegate_to: "{{ SOURCE }}"
+  run_once: True
+
+- name: Check the {{ DB_NAME }} DB Exists in {{ TARGET }}.
+  shell: mysql -u root -e 'SHOW DATABASES LIKE "{{ DB_NAME }}"' -sN
+  register: TARGET_DB
+  delegate_to: "{{ TARGET }}"
+  run_once: True
+
+- name: Fail if {{ DB_NAME }} DB is not present in "{{ TARGET }}"
+  fail:
+    msg: Entered DB Name = "{{ DB_NAME }}" is not present in "{{ TARGET }}"
+  when: DB_NAME not in TARGET_DB.stdout
+  delegate_to: "{{ TARGET }}"
+  run_once: True
+
+- import_tasks: 'db.yml'
+  when: TABLE is not defined
+
+- import_tasks: 'table.yml'
+  when: TABLE is defined

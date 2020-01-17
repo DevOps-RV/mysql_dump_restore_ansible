@@ -1,0 +1,18 @@
+---
+- name: Fail if DB_NAME is not set
+  fail:
+    msg: "`DB_NAME` not defined"
+  when: DB_NAME is not defined
+  run_once: yes
+
+- name: Fail if SOURCE is not set
+  fail:
+    msg: "`SOURCE` not defined"
+  when: SOURCE is not defined
+  run_once: yes
+
+- name: Fail if TARGET is not set
+  fail:
+    msg: "`TARGET` not defined"
+  when: TARGET is not defined
+  run_once: yes

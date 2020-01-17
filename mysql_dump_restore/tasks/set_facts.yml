@@ -1,0 +1,38 @@
+---
+- name: SET Facts
+  set_fact:
+    DB_NAME: "{{ DB_NAME }}"
+    SOURCE: "{{ SOURCE }}"
+    TARGET: "{{ TARGET }}"
+    BACKUP_PATH: "/opt/mysqldb/backup/"
+  delegate_to: "{{ SOURCE }}"
+  run_once: true
+
+- name: SET Facts
+  set_fact:
+    TABLE: "{{ TABLE }}"
+  when: TABLE is defined
+  delegate_to: "{{ SOURCE }}"
+  run_once: true
+
+- name: Print Parameters
+  debug:
+    msg: "{{msgitem}}"
+    verbosity: 2
+  loop:
+    - "DB_NAME: {{ DB_NAME }}"
+    - "SOURCE: {{ SOURCE }}"
+    - "TARGET: {{ TARGET }}"
+    - "BACKUP_PATH: {{ BACKUP_PATH }}"
+    - "DATE: {{ DATE.stdout }}"
+  loop_control:
+    loop_var: msgitem
+  delegate_to: "{{ SOURCE }}"
+  run_once: true
+
+- name: Print Table
+  debug:
+    msg: "TABLE: {{ TABLE }}"
+  when: TABLE is defined
+  delegate_to: "{{ SOURCE }}"
+  run_once: true

@@ -1,0 +1,39 @@
+---
+# Single / Multiple Databases
+
+- name: Dump single / multiple databases "{{ DB_NAME }}"
+  mysql_db:
+    state: dump
+    name: "{{ DB_NAME }}"
+    target: "{{ BACKUP_PATH }}/{{ DB_NAME }}_{{ DATE.stdout }}.sql"
+    login_user: root
+  register: DUMP_STATUS
+  when: TABLE is not defined
+  delegate_to: "{{ SOURCE }}"
+  run_once: True
+
+- name: Fetch the Dump file {{ DB_NAME }}_{{ DATE.stdout }}.sql file to Ansible Server /tmp
+  fetch:
+    src: "{{ BACKUP_PATH }}/{{ DB_NAME }}_{{ DATE.stdout }}.sql"
+    dest: "/tmp/{{ DB_NAME }}_{{ DATE.stdout }}.sql"
+    flat: yes
+  delegate_to: "{{ SOURCE }}"
+  run_once: True
+
+- name: Copy {{ DB_NAME }}_{{ DATE.stdout }}.sql file to {{ TARGET }}/tmp
+  copy:
+    src: "/tmp/{{ DB_NAME }}_{{ DATE.stdout }}.sql"
+    dest: "/tmp/{{ DB_NAME }}_{{ DATE.stdout }}.sql"
+    owner: root
+    group: root
+    mode: 0777
+    force: yes
+  delegate_to: "{{ TARGET }}"
+  run_once: True
+
+- name: Import {{ DB_NAME }}_{{ DATE.stdout }}.sql
+  shell: "mysql -u root < /tmp/{{ DB_NAME }}_{{ DATE.stdout }}.sql"
+  delegate_to: "{{ TARGET }}"
+  run_once: True
+
+  
