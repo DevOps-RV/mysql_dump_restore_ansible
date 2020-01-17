@@ -14,7 +14,7 @@ Source DB host and Traget DB host should have password less SSH from Ansible Ser
 1. DB_NAME - Name of the DB or Multiple DB with Seperated by ","
 2. SOURCE - Source DB hostname
 3. TARGET - Target DB hostname
-4. TABLE - Table Name in DB
+4. TABLE - Table Name in DB or Multiple Tables " "
 
 # Dependencies
 ----------------
