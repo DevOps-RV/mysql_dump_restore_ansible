@@ -6,14 +6,14 @@ MySql DB/Table Dump in Source and restore in Target
 ----------------
 Source DB host and Traget DB host should have password less SSH from Ansible Server
 
-```markdown
+```
 
 # Role Variables
 --------------
 
 1. DB_NAME - Name of the DB or Multiple DB with Seperated by ","
-2. SOURCE - Source DB hostname
-3. TARGET - Target DB hostname
+2. SOURCE - Source DB hostname/ip/fqdn
+3. TARGET - Target DB hostname/ip/fqdn
 4. TABLE - Table Name in DB or Multiple Tables " "
 
 # Dependencies
