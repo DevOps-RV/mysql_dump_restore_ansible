@@ -19,6 +19,7 @@ Source DB host and Traget DB host should have password less SSH from Ansible Ser
 # Dependencies
 ----------------
 DB_NAME should be present in both SOURCE and TARGET
+Default MYSQL USER - root
 
 ```
 
